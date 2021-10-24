@@ -3,25 +3,25 @@ const headers = {
 };
 
 const getConfigs = async () => {
-  const response = await fetch('http://localhost:3001');
+  const response = await fetch('http://192.168.0.56:3001');
   const items = await response.json();
   return items;
 }
 
 const createConfig = async (name) => {
-  const response = await fetch('http://localhost:3001', { method: 'POST', headers, body: JSON.stringify({name})});
+  const response = await fetch('http://192.168.0.56:3001', { method: 'POST', headers, body: JSON.stringify({name})});
   const item = await response.json();
   return item;
 }
 
 const changeConfig = async (id, config) => {
-  const response = await fetch(`http://localhost:3001/${id}`, { method: 'PATCH', headers, body: JSON.stringify(config)});
+  const response = await fetch(`http://192.168.0.56:3001/${id}`, { method: 'PATCH', headers, body: JSON.stringify(config)});
   const item = await response.json();
   return item;
 }
 
 const removeConfig = async (id) => {
-  const response = await fetch(`http://localhost:3001/${id}`, { method: 'DELETE', headers });
+  const response = await fetch(`http://192.168.0.56:3001/${id}`, { method: 'DELETE', headers });
   const item = await response.json();
   return item;
 }
