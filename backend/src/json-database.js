@@ -4,7 +4,7 @@ const ENCODING = 'utf-8';
 
 exports.createDatabase = (path) => {
   if (!fs.existsSync(path)) {
-    fs.writeFileSync(path, '[]', ENCODING);
+    fs.writeFileSync(path, '{}', ENCODING);
   }
 
   const readData = () => {

@@ -51,7 +51,7 @@ const removeConfig = async (id) => {
 //     })
 // })
 
-function Switch({ item, itemRemoved }) {
+function Switch({ isEdit, item, itemRemoved }) {
   const [value, setValue] = React.useState(item.state);
 
   const handleChange = React.useCallback((id, state) => {
@@ -74,25 +74,48 @@ function Switch({ item, itemRemoved }) {
           </label>
         </div>
         </div>
-        <div class="col-3 text-end">
-          <button type="button" class="btn btn-primary" onClick={() => handleRemove(item.id)}>Remove</button>
-        </div>
+        {isEdit && <div class="col-3">
+          <button type="button" class="btn btn-primary w-100" onClick={() => handleRemove(item.id)}>Remove</button>
+        </div>}
       </div>
   </form>
 }
 
-function Switches({ items, itemRemoved }) {  
+function Switches({ isEdit, items, itemRemoved, itemAdded }) {  
+  const [value, setValue] = React.useState('')
+
+  const handleCreate = React.useCallback(() => {
+    createConfig(value).then(config => {
+      setValue('');
+      itemAdded(config);
+    });
+
+  }, [value, setValue])
+
   return <div class="p-2">
-    {items.map(item => <Switch item={item} itemRemoved={itemRemoved} />)}
+    {items.map(item => <Switch isEdit={isEdit} item={item} itemRemoved={itemRemoved} />)}
+    {isEdit && <div class="row p-2">
+      <div class="col-9">
+        <input type="text" class="form-control" value={value} onChange={e => setValue(e.target.value)} />
+      </div>
+      <div class="col-3">
+        <button class="btn btn-primary w-100" type="button" onClick={handleCreate}>Add</button>
+      </div>
+    </div>}
   </div>
 }
 
 function App() {
   const [configs, setConfigs] = React.useState([])
+  const [isEdit, setIsEdit] = React.useState(false)
+
+  const handleAdd = React.useCallback((item) => {
+    setConfigs([...configs, item]);
+  }, [configs, setConfigs])
 
   const handleRemove = React.useCallback((id) => {
     setConfigs([...configs.filter(c => c.id !== id)]);
-}, [configs, setConfigs])
+  }, [configs, setConfigs])
 
   React.useEffect(() => {
     let ready = true;
@@ -108,14 +131,23 @@ function App() {
   return <div>
     <nav class="navbar navbar-light bg-light">
       <div class="container-fluid">
-        <span class="navbar-brand mb-0 h1">Navbar</span>
+        <span class="navbar-brand mb-0 h1">IOT Dashboard</span>
       </div>
     </nav>
 
     <div class="container-fluid">
+      <div class="row p-3">
+        <div class="col">
+        <div class="form-check form-switch">
+          <input class="form-check-input" type="checkbox" role="switch" id="is-edit-switch"
+            checked={isEdit} onChange={e => setIsEdit(e.target.checked)} />
+          <label class="form-check-label" for="is-edit-switch">Manage</label>
+        </div>
+        </div>
+      </div>
       <div class="row">
         <div class="col">
-          <Switches items={configs} itemRemoved={handleRemove} />
+          <Switches isEdit={isEdit} items={configs} itemRemoved={handleRemove} itemAdded={handleAdd} />
         </div>
         <div class="col">
           Placeholder
