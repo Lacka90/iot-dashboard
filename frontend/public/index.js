@@ -59,7 +59,8 @@ function Switch({ isEdit, item, itemRemoved }) {
 function Switches({ isEdit, items, itemRemoved, itemAdded }) {  
   const [value, setValue] = React.useState('')
 
-  const handleCreate = React.useCallback(() => {
+  const handleCreate = React.useCallback((e) => {
+    e.preventDefault();
     createConfig(value).then(config => {
       setValue('');
       itemAdded(config);
