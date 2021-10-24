@@ -26,31 +26,6 @@ const removeConfig = async (id) => {
   return item;
 }
 
-// $(document).ready(() => {
-//     const switches = document.getElementById('switches');
-//     const configName = document.getElementById('configName')
-//     const addConfig = document.getElementById('addConfig')
-
-//     addConfig.addEventListener('click', () => {
-//         console.log('yo')
-//         createConfig(configName.value).then(item => {
-//             const row = document.createElement('div');
-//             row.innerHTML = JSON.stringify(item);
-//             switches.appendChild(row);
-//             configName.value = '';
-//         })
-//     })
-
-//     switches.innerHTML = '';
-//     getConfigs().then(items => {
-//         items.forEach(item => {
-//             const row = document.createElement('div');
-//             row.innerHTML = JSON.stringify(item);
-//             switches.appendChild(row);
-//         })
-//     })
-// })
-
 function Switch({ isEdit, item, itemRemoved }) {
   const [value, setValue] = React.useState(item.state);
 
@@ -67,7 +42,7 @@ function Switch({ isEdit, item, itemRemoved }) {
       <div class="row">
         <div class="col-9 d-flex align-items-center">
         <div class="form-check">
-          <input class="form-check-input" type="checkbox" id={`check-${item.id}`}
+          <input class="form-check-input" type="checkbox" id={`check-${item.id}`} disabled={isEdit}
             checked={value} onChange={e => handleChange(item.id, e.target.checked)} />
           <label class="form-check-label" for={`check-${item.id}`}>
             {item.name}
@@ -94,14 +69,14 @@ function Switches({ isEdit, items, itemRemoved, itemAdded }) {
 
   return <div class="p-2">
     {items.map(item => <Switch isEdit={isEdit} item={item} itemRemoved={itemRemoved} />)}
-    {isEdit && <div class="row p-2">
+    {isEdit && <form class="row p-2" onSubmit={handleCreate}>
       <div class="col-9">
         <input type="text" class="form-control" value={value} onChange={e => setValue(e.target.value)} />
       </div>
       <div class="col-3">
-        <button class="btn btn-primary w-100" type="button" onClick={handleCreate}>Add</button>
+        <button class="btn btn-primary w-100" type="submit">Add</button>
       </div>
-    </div>}
+    </form>}
   </div>
 }
 
