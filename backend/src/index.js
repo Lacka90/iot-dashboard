@@ -27,13 +27,15 @@ app.get('/:id', (req, res) => {
 })
 
 app.put('/:id', (req, res) => {
-    const item = db.put(req.params.id, req.body);
+    const id = req.params.id;
+    const item = db.put(id, req.body);
+    mq.send(`device/${id}`, item.status);
     res.status(200).send(item)
 })
 
 app.patch('/:id', (req, res) => {
-    console.log({id: req.params.id, body: req.body})
-    const item = db.patch(req.params.id, req.body);
+    const id = req.params.id;
+    const item = db.patch(id, req.body);
     mq.send(`device/${id}`, item.status);
     res.status(200).send(item)
 })
