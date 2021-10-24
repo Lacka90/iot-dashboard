@@ -12,7 +12,8 @@
   "license": "ISC",
   "dependencies": {
     "fastify": "^3.22.1",
-    "fastify-cors": "^6.0.2"
+    "fastify-cors": "^6.0.2",
+    "mqtt": "^4.2.8"
   },
   "devDependencies": {}
 }

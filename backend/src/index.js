@@ -1,11 +1,15 @@
 const fastify = require('fastify');
 const fastifyCors = require('fastify-cors')
 const database = require('./json-database');
+const mqtt = require('./mqtt');
+
+
 
 const app = fastify({ logger: true });
 app.register(fastifyCors, {});
 
 const db = database.createDatabase('./config.db');
+const mq = mqtt.createMqtt();
 
 app.get('/', (_, res) => {
     const items = db.list();
@@ -30,6 +34,7 @@ app.put('/:id', (req, res) => {
 app.patch('/:id', (req, res) => {
     console.log({id: req.params.id, body: req.body})
     const item = db.patch(req.params.id, req.body);
+    mq.send(`device/${id}`, item.status);
     res.status(200).send(item)
 })
 
